@@ -6,5 +6,4 @@ class calculution():
 		self.s4m=int(input("Enter the Marks of Chemistry"))
 		self.s5m=int(input("Enter the Marks of Maths"))
 
-	def get(self):
-		self.
+	
