@@ -23,35 +23,36 @@ class inputAll():
         return name        
 
     def checknum(self,mark,mark_type):
+
+        while True:
+            mark = input(f"Enter {mark_type}:")
+            if len(mark)==0:
+                print("Field cannot be empty")
+                continue
+
+            if not mark.isdigit():
+                print("Only numbers are allowed")
+                continue
+
+            mark = int(mark)
+
+            if mark<=80 and mark>=0:
+                return mark
         
-        if len(mark)==0:
-            print("Field cannot be empty")
-            return self.checknum(input(f"Enter {mark_type}:"),mark_type)
-
-        if not mark.isdigit():
-            print("Only numbers are allowed")
-            return self.checknum(input(f"Enter {mark_type}: "),mark_type)
-
-        mark = int(mark)
-
-        if mark<=80 and mark>=0:
-            return mark
-        
-        else:
-            print("enter a valid mark")
-            return self.checknum(input(f"Enter {mark_type}: "),mark_type) 
+            else:
+                print("enter a valid mark")
+                continue 
 
     def checknum1(self,pmark,pmark_type):
         while True:
+            pmark = input(f"Enter {pmark_type}:")
             if len(pmark)==0:
                 print("Field cannot be empty")
-                pmark,pmark_type=input(f"Enter {pmark_type}: ",pmark_type)
-                return pmark,pmark_type
+                continue
 
             if not pmark.isdigit():
                 print("Only numbers are allowed")
-                pmark,pmark_type=(input(f"Enter {pmark_type}: "),pmark_type)
-                return pmark,pmark_type
+                continue
 
             pmark = int(pmark)    
 
@@ -60,7 +61,7 @@ class inputAll():
 
             else:
                 print("Enter number between 0 to 20")
-                pmark,pmark_type=input((f"Enter {pmark_type}: "),pmark_type)
+                continue
 
 
         '''if len(pmark)==0:
@@ -97,20 +98,21 @@ class inputAll():
         self.cno = random.randrange(10000,99999)
         self.reg = random.randrange(1000000,9999999)
         #self.dob = date(input("Enter Your DOB:"))
-        self.s1m = self.checknum(input("Enter the Thoery Marks of Hindi b/w 0-80: "), mark_type = "Theroy marks of hindi")
+        
 
-        self.s2m = self.checknum(input("Enter the Thoery Marks of English b/w 0-80: "), mark_type = "Thoery marks of English")
-        self.s3m = self.checknum(input("Enter the Thoery Marks of Physics b/w 0-80: "), mark_type = "Thoery marks of Physics")
-        self.s4m = self.checknum(input("Enter the Thoery Marks of Chemistry b/w 0-80: "), mark_type = "Thoery marks of Chemistry")
-        self.s5m = self.checknum(input("Enter the Thoery Marks of Maths b/w 0-80:" ), mark_type = "Thoery marks of Maths")
+        self.s1m = self.checknum(self, mark_type = "Theroy marks of hindi")
+        self.s2m = self.checknum(self, mark_type = "Thoery marks of English")
+        self.s3m = self.checknum(self, mark_type = "Thoery marks of Physics")
+        self.s4m = self.checknum(self, mark_type = "Thoery marks of Chemistry")
+        self.s5m = self.checknum(self, mark_type = "Thoery marks of Maths")
 
 
-        self.p1m = self.checknum1(input("Enter the Practical Marks of Hindi b/w 0-20: "), pmark_type = "Practical marks of hindi")
+        self.p1m =  self.checknum1(self,pmark_type = "Practical marks of hindi")
 
-        self.p2m = self.checknum1(input("Enter the Practical Marks of English b/w 0-20: "), pmark_type = "Practical marks of English")
-        self.p3m = self.checknum1(input("Enter the Practical Marks of Physics b/w 0-20: "), pmark_type = "Practical marks of Physics")
-        self.p4m = self.checknum1(input("Enter the Practical Marks of Chemistry b/w 0-20: "), pmark_type = "Practical Marks of Chemistry")
-        self.p5m = self.checknum1(input("Enter the Practical Marks of Maths b/w 0-20:" ), pmark_type = "Practical Marks of Maths")
+        self.p2m = self.checknum1(self, pmark_type = "Practical marks of English")
+        self.p3m = self.checknum1(self, pmark_type = "Practical marks of Physics")
+        self.p4m = self.checknum1(self, pmark_type = "Practical Marks of Chemistry")
+        self.p5m = self.checknum1(self, pmark_type = "Practical Marks of Maths")
 
 
         self.hindi = self.s1m + self.p1m
