@@ -1,3 +1,4 @@
+from db import con,cur
 import random
 class inputAll():
 
@@ -81,11 +82,114 @@ class inputAll():
              print("Enter number between 0 to 20")
              return self.checknum1(input(f"Enter {pmark_type}: "),pmark_type)'''
         
-        
+    def get_roll(self):
+        while True:
+            roll_no = input("Enter your roll number: ")
 
-                   
+            if len(roll_no)==0:
+                print("Roll number cannot be empty:")
+                continue
+            
+            if not roll_no.isdigit():
+                print("Roll number should be in Int numbers")
+                continue
+            
+            if len(roll_no)!=7:
+                print("Enter number in 7 digits")
+                continue
+
+            roll_no = int(roll_no)
+
+            cur.execute("SELECT roll_no FROM students where roll_no = %s",(roll_no,))
+
+            data = cur.fetchone()
+
+            if data:
+                print("Roll number already exist")
+                continue
+
+            return int(roll_no) 
+
+            
+
+    def insert_all(self):
+        
+        query = """INSERT into students(
+                roll_no,
+                name,
+                mother_name,father_name,
+                stream,school_name,
+                ms_no,center_no,reg_no,
+                hindi_theory,english_theory,physics_theory,chemistry_theory,maths_theory,
+                hindi_practical,english_practical,physics_practical,chemistry_practical,maths_practical,
+                hindi_total,english_total,physics_total,chemistry_total,maths_total,grand_total
+                )
+
+                values(%s,%s,%s,%s,%s,
+                       %s,%s,%s,%s,%s,
+                       %s,%s,%s,%s,%s,
+                       %s,%s,%s,%s,%s,
+                       %s,%s,%s,%s,%s)
+
+                """
+        values = (
+                  self.rno,self.name,self.mname,self.fname,self.stream,self.school_n,
+                  self.ms_no,self.cno,self.reg,self.s1m,self.s2m,self.s3m,self.s4m,self.s5m,
+                  self.p1m,self.p2m,self.p3m,self.p4m,self.p5m,self.hindi,self.eng,self.phy,self.chem,
+                  self.math,self.total
+                  )          
+
+        cur.execute(query,values)
+        con.commit()
+        print("Data saved")
+
+
+    def get_student(self):
+
+        roll_no = input("Enter your roll number:")
+
+        cur.execute("SELECT * From students where roll_no=%s",(roll_no,))
+
+        data = cur.fetchone()
+
+        if not data:
+            print("Student not found")
+            return
+
+        self.rno = data[0]
+        self.name = data[1]
+        self.mname = data[2]
+        self.fname = data[3]
+        self.stream = data[4]
+        self.school_n = data[5]
+        self.ms_no = data[6]
+        self.cno= data[7]
+        self.reg = data[8]
+        self.s1m = data[9]
+        self.s2m = data[10]
+        self.s3m = data[11]
+        self.s4m = data[12]
+        self.s5m = data[13]
+        self.p1m = data[14]
+        self.p2m = data[15]
+        self.p3m = data[16]
+        self.p4m = data[17]
+        self.p5m = data[18]
+        self.hindi = data[19]
+        self.eng = data[20]
+        self.phy = data[21]
+        self.chem = data[22]
+        self.math = data[23]
+        self.total = data[24]
+
+        self.displayAll()
+
 
     def __init__(self):
+
+        pass
+
+    def take_input(self):
 
         self.name = self.checkname(input("Enter name: "), name_type = "name")
 
@@ -94,7 +198,7 @@ class inputAll():
         self.stream = self.checkname(input("Enter Stream (PCM,PCB,Commerce,PCCS,PCMB,Com-Math,Com): "),name_type = "Stream")
         self.school_n = input("Enter School name: ")
         self.ms_no = random.randrange(1000000,9999999)
-        self.rno = random.randrange(1000000,9999999)
+        self.rno = self.get_roll()
         self.cno = random.randrange(10000,99999)
         self.reg = random.randrange(1000000,9999999)
         #self.dob = date(input("Enter Your DOB:"))
@@ -205,9 +309,11 @@ class inputAll():
         print('|'+"="*104+'|')
 
 
-inp = inputAll()
+#inp = inputAll()
 
-inp.displayAll()
+#inp.insert_all()
+#inp.get_student()
+#inp.displayAll()
 
 
 	
