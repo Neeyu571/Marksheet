@@ -185,20 +185,154 @@ class inputAll():
         self.displayAll()
 
 
+    def update(self):
+        roll_no = input("Enter the roll number which you want to update: ")
+
+        cur.execute("SELECT * FROM students where roll_no=%s",(roll_no,))
+
+        data = cur.fetchone()
+
+        if not data:
+            print("Student not found")
+            return
+
+        print("Enter new details:")
+
+        self.s1m = self.checknum(self, mark_type = "Theroy marks of hindi")
+        self.s2m = self.checknum(self, mark_type = "Thoery marks of English")
+        self.s3m = self.checknum(self, mark_type = "Thoery marks of Physics")
+        self.s4m = self.checknum(self, mark_type = "Thoery marks of Chemistry")
+        self.s5m = self.checknum(self, mark_type = "Thoery marks of Maths")
+
+
+        self.p1m =  self.checknum1(self,pmark_type = "Practical marks of hindi")
+
+        self.p2m = self.checknum1(self, pmark_type = "Practical marks of English")
+        self.p3m = self.checknum1(self, pmark_type = "Practical marks of Physics")
+        self.p4m = self.checknum1(self, pmark_type = "Practical Marks of Chemistry")
+        self.p5m = self.checknum1(self, pmark_type = "Practical Marks of Maths")
+
+
+        self.hindi = self.s1m + self.p1m
+        self.eng = self.s2m + self.p2m
+        self.phy = self.s3m + self.p3m
+        self.chem = self.s4m + self.p4m
+        self.math = self.s5m + self.p5m
+
+        self.total= (self.hindi + self.eng + self.phy + self.chem + self.math)
+
+        cur.execute(
+            """
+            Update students SET
+            
+            hindi_theory=%s,english_theory=%s,physics_theory=%s,chemistry_theory=%s,maths_theory=%s,
+            hindi_practical=%s,english_practical=%s,physics_practical=%s,chemistry_practical=%s,maths_practical=%s,
+            hindi_total=%s,english_total=%s,physics_total=%s,chemistry_total=%s,maths_total=%s,grand_total=%s
+            
+            Where roll_no=%s
+            """,
+            (self.s1m,self.s2m,self.s3m,self.s4m,self.s5m,
+             self.p1m,self.p2m,self.p3m,self.p4m,self.p5m,self.hindi,self.eng,self.phy,self.chem,
+             self.math,self.total,
+
+             roll_no)
+            )
+        con.commit()
+        print("Student Updated") 
+
+        cur.execute("SELECT * From students where roll_no=%s",(roll_no,))
+
+        data = cur.fetchone()
+
+        if not data:
+            print("Student not found")
+            return
+
+        self.rno = data[0]
+        self.name = data[1]
+        self.mname = data[2]
+        self.fname = data[3]
+        self.stream = data[4]
+        self.school_n = data[5]
+        self.ms_no = data[6]
+        self.cno= data[7]
+        self.reg = data[8]
+        self.s1m = data[9]
+        self.s2m = data[10]
+        self.s3m = data[11]
+        self.s4m = data[12]
+        self.s5m = data[13]
+        self.p1m = data[14]
+        self.p2m = data[15]
+        self.p3m = data[16]
+        self.p4m = data[17]
+        self.p5m = data[18]
+        self.hindi = data[19]
+        self.eng = data[20]
+        self.phy = data[21]
+        self.chem = data[22]
+        self.math = data[23]
+        self.total = data[24]
+
+        self.displayAll()  
+
+    def delete(self):
+        roll_no = input("Enter the roll number which you want to delete: ")
+
+        cur.execute("SELECT * From students where roll_no=%s",(roll_no,)) 
+
+        data = cur.fetchone()
+
+        if not data:
+            print("Student no found")
+
+        cur.execute("DELETE From students where roll_no=%s",(roll_no,))
+
+        con.commit()
+        print("Student data deleted")
+
+    def checkresult(self):
+
+        count = 0
+
+        if self.s1m < 27:
+            count+=1
+        if self.s2m < 27:
+            count +=1
+        if self.s3m < 27:
+            count +=1 
+        if self.s4m < 27:
+            count +=1
+        if self.s5m < 27:
+            count +=1 
+
+        if count == 0:
+            return "PASS"
+        elif count <= 3:
+            return f"Supply({count})"
+        else:
+            return "FAIL"    
+   
+
+
+
     def __init__(self):
 
         pass
 
-    def take_input(self):
+    def take_input(self,update=False):
 
+        
         self.name = self.checkname(input("Enter name: "), name_type = "name")
 
         self.mname = self.checkname(input("Enter Mother name: "), name_type = "Mother Name")
         self.fname = self.checkname(input("Enter father name: "), name_type = "Father Name")
-        self.stream = self.checkname(input("Enter Stream (PCM,PCB,Commerce,PCCS,PCMB,Com-Math,Com): "),name_type = "Stream")
+        self.stream = self.checkname(input("Enter Stream: "),name_type = "Stream")
         self.school_n = input("Enter School name: ")
         self.ms_no = random.randrange(1000000,9999999)
+        
         self.rno = self.get_roll()
+        
         self.cno = random.randrange(10000,99999)
         self.reg = random.randrange(1000000,9999999)
         #self.dob = date(input("Enter Your DOB:"))
@@ -284,13 +418,13 @@ class inputAll():
 
         print('|'+"="*104+'|')
 
-        print('|'+f"Total Agregate: {self.total}")
+        print('|'+f"Total Agregate: {self.total}"+" "*85+'|')
 
-        if(self.total<166):
-            print('|'+"Result: FAIL"+" "*92+'|')
-
-        else:
-             print('|'+"Result: PASS"+" "*92+'|') 
+        
+        
+        result = self.checkresult()
+        text = f"Result:{result}"
+        print('|'+text+(" "*(104-len(text)))+'|') 
 
 
 
